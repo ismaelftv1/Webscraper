@@ -5,6 +5,7 @@ const fs = require('fs');
 let text = fs.readFileSync("./link.txt", "utf-8");
 let links = text.split("\n");
 
+let json = [];
 
 (async () => {
     const browser = await firefox.launch();
@@ -14,8 +15,25 @@ let links = text.split("\n");
         //await page.screenshot({path: 'gafrica.png'});
         const precio = await page.textContent('[class="no-iva-base"]');
         const producto = await page.textContent('[class="articulo"]');
-        console.log(`Precio Sin IVA: ${precio}€ , Producto: ${producto}`);
+
+        const customer = {
+            name: producto,
+            Precio_Sin_IVA: precio
+        };
+
+        json.push(customer);
 
     }
     await browser.close();
+    EscribirJson(json);
 })();
+
+function EscribirJson(data) {
+    fs.writeFileSync("Productos.json",JSON.stringify(data,null,2), (err) => {
+        if (err)
+            console.log(err);
+        else {
+            console.log("Archivo Productos.json creado con éxito");
+        }
+    });
+}
