@@ -16,12 +16,12 @@ let json = [];
         const precio = await page.textContent('[class="no-iva-base"]');
         const producto = await page.textContent('[class="articulo"]');
 
-        const customer = {
+        const productos = {
             name: producto,
             Precio_Sin_IVA: precio
         };
 
-        json.push(customer);
+        json.push(productos);
 
     }
     await browser.close();
