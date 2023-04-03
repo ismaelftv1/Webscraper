@@ -13,8 +13,10 @@ let json = [];
     for (let i = 0; i < links.length; i++) {
         await page.goto(links[i]);
         //await page.screenshot({path: 'gafrica.png'});
-        const precio = await page.textContent('[class="no-iva-base"]');
+        let precio = await page.textContent('[class="no-iva-base"]');
         const producto = await page.textContent('[class="articulo"]');
+
+        precio = precio.replace(/,/g,'.');
 
         const productos = {
             name: producto,
