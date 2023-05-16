@@ -1,5 +1,6 @@
 const { firefox } = require('playwright');
 const fs = require('fs');
+const { checkPrime } = require('crypto');
 
 //Lee los links del archivo link.txt y los guarda en un array.
 let text = fs.readFileSync("./link.txt", "utf-8");
@@ -10,20 +11,38 @@ let json = [];
 (async () => {
     const browser = await firefox.launch();
     const page = await browser.newPage();
+
+    let precio;
+    let producto;
+    let descuento;
+
+
+    console.log("iniciando programa");
+
     for (let i = 0; i < links.length; i++) {
         await page.goto(links[i]);
         //await page.screenshot({path: 'gafrica.png'});
-        let precio = await page.textContent('[class="no-iva-base"]');
-        const producto = await page.textContent('[class="articulo"]');
+        precio = await page.textContent('[class="no-iva-base"]');
+        producto = await page.textContent('[class="articulo"]');
+        checkdescuento= await page.locator("[class=badget-discount--number]").count();
+
+        if (checkdescuento > 0) {
+            descuento = await page.textContent('[class="badget-discount--number"]');
+        }else{
+            descuento = '0%';
+        };
 
         precio = precio.replace(/,/g,'.');
 
         const productos = {
             name: producto,
-            Precio_Sin_IVA: precio
+            Precio_Sin_IVA: precio,
+            descuento: descuento
         };
 
         json.push(productos);
+
+        console.log(`Elemento ${i} Cargado`)
 
     }
     await browser.close();
