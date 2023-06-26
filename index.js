@@ -43,7 +43,7 @@ let json = [];
         //lo añadimos a un array
         json.push(productos);
 
-        console.log(`Elemento ${i} Cargado`)
+        console.log(`Elemento ${i+1} Cargado`)
 
     }
     //cierra el navegador
